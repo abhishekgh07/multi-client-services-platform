@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Service = require('../models/Service');
+const Review = require('../models/Review');
 
 // ADD SERVICE
 router.post('/', async (req, res) => {
@@ -20,6 +21,27 @@ router.get('/', async (req, res) => {
     res.json(services);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch services' });
+  }
+});
+
+// ADD REVIEW
+router.post('/review', async (req, res) => {
+  try {
+    const review = new Review(req.body);
+    await review.save();
+    res.json({ message: 'Review added!', review });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add review' });
+  }
+});
+
+// GET ALL REVIEWS
+router.get('/reviews', async (req, res) => {
+  try {
+    const reviews = await Review.find();
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch reviews' });
   }
 });
 
